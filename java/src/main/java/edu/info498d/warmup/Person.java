@@ -4,7 +4,7 @@ import java.beans.*;
 import java.lang.IllegalArgumentException;
 import java.util.*;
 
-public class Person implements Comparable {
+public class Person implements Comparable<Person> {
   private int age;
   private String name;
   private double salary;
@@ -12,7 +12,12 @@ public class Person implements Comparable {
   private boolean propertyChangeFired;
 
   public static void main(String[] args) {
+    Person p = new Person("Jb", 13, 2200.00);
+    Person q = new Person("Jb", 13, 2100.00);
 
+    int x = p.compareTo(q);
+
+    System.out.println(x);
   }
 
   public Person() {
@@ -105,6 +110,29 @@ public class Person implements Comparable {
     
     this.pcs.firePropertyChange("ssn", old, value);
     propertyChangeFired = true;
+  }
+
+  /**
+   *
+   * @param other
+   * @return
+   */
+  public int compareTo(Person other) {
+    if(this.age > other.age) {
+      return 1;
+    }
+    else if(this.age < other.age) {
+      return -1;
+    }
+    else if(this.name.compareTo(other.name) > 0) {
+      return -1;
+    }
+    else if(this.name.compareTo(other.name) < 0 ) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
   }
 
   public boolean getPropertyChangeFired() {
