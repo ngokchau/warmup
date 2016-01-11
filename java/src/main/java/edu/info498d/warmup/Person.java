@@ -3,6 +3,7 @@ package edu.info498d.warmup;
 import java.beans.*;
 import java.lang.IllegalArgumentException;
 import java.util.*;
+import java.util.Comparator;
 
 public class Person implements Comparable<Person> {
   private int age;
@@ -12,18 +13,30 @@ public class Person implements Comparable<Person> {
   private boolean propertyChangeFired;
 
   public static void main(String[] args) {
-    Person p = new Person("Jb", 13, 2200.00);
+    Person p = new Person("Ja", 13, 2100.00);
     Person q = new Person("Jb", 13, 2100.00);
 
     int x = p.compareTo(q);
 
-    System.out.println(x);
+    SalaryComparator sc = new SalaryComparator();
+    int y = sc.compare(p, q);
+
+    System.out.println(y);
   }
 
+  /**
+   * Constructor
+   */
   public Person() {
     this("", 0, 0.0);
   }
 
+  /**
+   * Constructor
+   * @param n
+   * @param a
+   * @param s
+   */
   public Person(String n, int a, double s) {
     name = n;
     age = a;
@@ -113,7 +126,6 @@ public class Person implements Comparable<Person> {
   }
 
   /**
-   *
    * @param other
    * @return
    */
@@ -171,5 +183,21 @@ public class Person implements Comparable<Person> {
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
       this.pcs.removePropertyChangeListener(listener);
+  }
+
+  public static class SalaryComparator implements Comparator<Person> {
+    public void SalaryComparator() { }
+
+    public int compare(Person p, Person q) {
+      if(p.getSalary() > q.getSalary()) {
+        return 1;
+      }
+      else if(p.getSalary() < q.getSalary()) {
+        return -1;
+      }
+      else {
+        return 0;
+      }
+    }
   }
 }
