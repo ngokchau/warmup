@@ -21,7 +21,9 @@ public class Person implements Comparable<Person> {
     SalaryComparator sc = new SalaryComparator();
     int y = sc.compare(p, q);
 
-    System.out.println(y);
+    ArrayList<Person> list = Person.createFamily();
+
+    System.out.println(list.get(0).getName());
   }
 
   /**
@@ -145,6 +147,20 @@ public class Person implements Comparable<Person> {
     else {
       return 0;
     }
+  }
+
+  /**
+   * @return a set of people in an ArrayList
+   */
+  public static ArrayList<Person> createFamily() {
+    ArrayList<Person> members = new ArrayList<Person>();
+
+    members.add(new Person("Anakin", 41, 75000));
+    members.add(new Person("Padme", 46, 1000000));
+    members.add(new Person("Luke", 19, 0));
+    members.add(new Person("Leia", 19, 10000));
+
+    return members;
   }
 
   public boolean getPropertyChangeFired() {
