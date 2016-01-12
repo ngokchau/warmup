@@ -98,8 +98,7 @@ public class TestPerson {
   public void catchPropertyChange() {
     Person alice = new Person("Alice", 43, 250000);
 
-    PropertyChangeSupport pcs = new PropertyChangeSupport();
-    pcs.addPropertyChangeListener(new PropertyChangeListener() {
+    alice.addPropertyChangeListener(new PropertyChangeListener() {
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
         assertEquals("ssn", evt.getPropertyName());

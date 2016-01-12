@@ -3,6 +3,7 @@ package edu.info498d.warmup;
 import java.beans.*;
 import java.lang.IllegalArgumentException;
 import java.util.*;
+import java.util.Collection;
 import java.util.Comparator;
 
 public class Person implements Comparable<Person> {
@@ -13,17 +14,11 @@ public class Person implements Comparable<Person> {
   private boolean propertyChangeFired;
 
   public static void main(String[] args) {
-    Person p = new Person("Ja", 13, 2100.00);
-    Person q = new Person("Jb", 13, 2100.00);
+    List<Person> people = Person.createFamily();
+    Collections.sort(people);
 
-    int x = p.compareTo(q);
-
-    SalaryComparator sc = new SalaryComparator();
-    int y = sc.compare(p, q);
-
-    ArrayList<Person> list = Person.createFamily();
-
-    System.out.println(list.get(0).getName());
+    System.out.println(new Person("Padme", 46, 1000000));
+    System.out.println(people.get(0));
   }
 
   /**
@@ -43,8 +38,8 @@ public class Person implements Comparable<Person> {
     name = n;
     age = a;
     salary = s;
-    ssn = null;
-    propertyChangeFired = false;
+    ssn = "";
+    this.propertyChangeFired = false;
   }
 
   /**
@@ -65,6 +60,7 @@ public class Person implements Comparable<Person> {
     }
 
     this.age = a;
+    this.propertyChangeFired = true;
   }
 
   /**
@@ -85,6 +81,7 @@ public class Person implements Comparable<Person> {
     }
 
     this.name = n;
+    this.propertyChangeFired = true;
   }
 
   /**
@@ -105,6 +102,7 @@ public class Person implements Comparable<Person> {
     }
 
     this.salary = s;
+    this.propertyChangeFired = true;
   }
 
   /**
@@ -124,7 +122,7 @@ public class Person implements Comparable<Person> {
     ssn = value;
     
     this.pcs.firePropertyChange("ssn", old, value);
-    propertyChangeFired = true;
+    this.propertyChangeFired = true;
   }
 
   /**
@@ -132,16 +130,16 @@ public class Person implements Comparable<Person> {
    * @return
    */
   public int compareTo(Person other) {
-    if(this.age > other.age) {
+    if(this.age > other.getAge()) {
+      return -1;
+    }
+    else if(this.age < other.getAge()) {
       return 1;
     }
-    else if(this.age < other.age) {
+    else if(other.getName().compareTo(this.name) > 0) {
       return -1;
     }
-    else if(this.name.compareTo(other.name) > 0) {
-      return -1;
-    }
-    else if(this.name.compareTo(other.name) < 0 ) {
+    else if(other.getName().compareTo(this.name) < 0 ) {
       return 1;
     }
     else {
@@ -152,19 +150,23 @@ public class Person implements Comparable<Person> {
   /**
    * @return a set of people in an ArrayList
    */
-  public static ArrayList<Person> createFamily() {
-    ArrayList<Person> members = new ArrayList<Person>();
+  public static List<Person> createFamily() {
+    List<Person> members = new ArrayList<Person>();
 
-    members.add(new Person("Anakin", 41, 75000));
     members.add(new Person("Padme", 46, 1000000));
-    members.add(new Person("Luke", 19, 0));
+    members.add(new Person("Anakin", 41, 75000));
     members.add(new Person("Leia", 19, 10000));
+    members.add(new Person("Luke", 19, 0));
 
     return members;
   }
 
+  public String toString() {
+    return "Person[name:" + this.name + ";age:" + this.age + ";salary:" + this.salary + "]";
+  }
+
   public boolean getPropertyChangeFired() {
-    return propertyChangeFired;
+    return this.propertyChangeFired;
   }
 
   public double calculateBonus() {
@@ -172,11 +174,13 @@ public class Person implements Comparable<Person> {
   }
   
   public String becomeJudge() {
-    return "The Honorable" + name;
+    return "The Honorable " + name;
   }
   
   public int timeWarp() {
-    return age + 10;
+    this.age += 10;
+    this.propertyChangeFired = true;
+    return this.age;
   }
 
   /**
@@ -184,8 +188,13 @@ public class Person implements Comparable<Person> {
    * @param other
    * @return true if name and age of both instances are the same
    */
-  public boolean equals(Person other) {
-    return this.name.equals(other.name) && this.age == other.age;
+  public boolean equals(Object other) {
+    if(null == other || other instanceof Integer) {
+      return false;
+    }
+
+    Person p = (Person) other;
+    return this.name.equals(p.name) && this.age == p.age;
   }
 
   // PropertyChangeListener support; you shouldn't need to change any of
