@@ -1,6 +1,10 @@
 package edu.info498d.warmup;
 
 import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.lang.Override;
 import java.util.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -94,18 +98,16 @@ public class TestPerson {
   public void catchPropertyChange() {
     Person alice = new Person("Alice", 43, 250000);
 
-    // ============ YOUR CHANGES BEGIN HERE
-    // Call addPropertyChangeListener with an *anonymous* PropertyChangedListener object
-    // that runs the following code on a PropertyChangeEvent:
-    // that has the following code in it:
-    /*
-    assertEquals("ssn", evt.getPropertyName());
-    assertEquals("", evt.getOldValue());
-    assertEquals("012-34-5678", evt.getNewValue());
-    */
+    PropertyChangeSupport pcs = new PropertyChangeSupport();
+    pcs.addPropertyChangeListener(new PropertyChangeListener() {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        assertEquals("ssn", evt.getPropertyName());
+        assertEquals("", evt.getOldValue());
+        assertEquals("012-34-5678", evt.getNewValue());
+      }
+    });
 
-    // ============ YOUR CHANGES END HERE
-    
     assertEquals(false, alice.getPropertyChangeFired());
     alice.setSSN("012-34-5678");
     assertEquals(true, alice.getPropertyChangeFired());
